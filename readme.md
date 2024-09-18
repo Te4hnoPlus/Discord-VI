@@ -11,7 +11,7 @@
 Просто скопируй ID приложения, имя которого ты хочешь использовать, и нажми Start
 
 ![gui](images/gui_1.png)
-![example](https://cdn.discordapp.com/attachments/1230759080453214220/1285987685827215381/image.png)
+![example](https://cdn.discordapp.com/attachments/1230759080453214220/1285987685827215381/image.png?ex=66ec44dc&is=66eaf35c&hm=9a489a1f5a52b3b2d7f79d44c59d651e86aac53628bcec83355d9d9f3ef30dc2&)
 
 ## Возможные ошибки и недочеты
 
