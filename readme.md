@@ -14,9 +14,11 @@
 
 ![gui](images/gui_1.png)
 
-Пример как это выглядит в Discord
+Примеры как это выглядит в Discord
 
 ![example](https://cdn.discordapp.com/attachments/1230759080453214220/1285987685827215381/image.png?ex=66ec44dc&is=66eaf35c&hm=9a489a1f5a52b3b2d7f79d44c59d651e86aac53628bcec83355d9d9f3ef30dc2&)
+![example](https://cdn.discordapp.com/attachments/794054238405263361/1285961576364638208/image.png?ex=66ec2c8b&is=66eadb0b&hm=07a115cd1bf5a4cc42791ada33266b47329e58dfc2080c6e72c5ccf115632914&)
+![example](https://cdn.discordapp.com/attachments/794054238405263361/1285946096060993597/image.png?ex=66ec1e21&is=66eacca1&hm=da0e626fdc48a393158bd3bf809e7bbfbfa35d84f235d9f403a225277c7efb47&)
 
 ## Возможные ошибки и недочеты
 
