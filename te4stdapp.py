@@ -44,30 +44,33 @@ class baseApp:
     """
     Базовая единица приложения
     """
-    def __init__(self, root: Wm, name="Std Te4hno Python APP", width=30) -> None:
+    def __init__(self, root: Wm, name="Std Te4hno Python APP", width=30, components=None) -> None:
         self.root = root
-        self.config = None
+        self.__config__ = None
         self.defWidth = width
         self.title = name
         self.root.title(name)
         self.frm = ttk.Frame(self.root, padding=20)
         self.frm.grid()
         self.cursor = 0
-        self.__components__ = {}
-        self.__components__["__onclose__"] = []
-        self.__components__["__onstart__"] = []
+        if(components == None):
+            self.__components__ = {}
+            self.__components__["__onclose__"] = []
+            self.__components__["__onstart__"] = []
 
-        # Выполнение функций перед закрытием окна
-        def onClose():
-            cansel = None
-            for func in self.__components__["__onclose__"]: func(self)
-            if not (cansel == True): self.root.destroy()
+            # Выполнение функций перед закрытием окна
+            def onClose():
+                cansel = None
+                for func in self.__components__["__onclose__"]: func(self)
+                if not (cansel == True): self.root.destroy()
 
-        self.root.protocol("WM_DELETE_WINDOW", onClose)
+            self.root.protocol("WM_DELETE_WINDOW", onClose)
 
-        self.addVarComp(var="title", funcGet=lambda:self.title, funcSet=self.setTitle)
-        def setSize(val):self.root.size = val
-        self.addVarComp(var="size", funcGet=lambda:self.root.size, funcSet=setSize)
+            self.addVarComp(var="title", funcGet=lambda:self.title, funcSet=self.setTitle)
+            def setSize(val):self.root.size = val
+            self.addVarComp(var="size", funcGet=lambda:self.root.size, funcSet=setSize)
+        else:
+            self.__components__ = components
 
 
     def setTitle(self, title) -> Self:
@@ -171,8 +174,6 @@ class baseApp:
         return self.text("")
     
 
-
-
     def input(self, var:str, default=None, focusTask=lambda app:None, unfocusTask=lambda app:None, width=None, height=1, pos=None) -> Self:
         """
         Добавить поле ввода в конец окна
@@ -236,8 +237,8 @@ class baseApp:
         """
         Получить или изменить файл конфигурации
         """
-        if(config==None):return self.config
-        self.config = config
+        if(config==None):return self.__config__
+        self.__config__ = config
         return self
 
 
@@ -246,8 +247,8 @@ class baseApp:
         if type(name) == tuple:
             val = name[1]
             name = name[0]
-        if name in self.config:
-            return self.config[name]
+        if name in self.__config__:
+            return self.__config__[name]
         if name in self.__components__:
             result = self.__components__[name][0]()
             if result != None: return result
@@ -257,11 +258,11 @@ class baseApp:
     def __setitem__(self, name, val):
         if name in self.__components__:
             self.__components__[name][1](val)
-        self.config[name] = val
+        self.__config__[name] = val
 
 
     def __contains__(self, name):
-        return name in self.config or name in self.__components__
+        return name in self.__config__ or name in self.__components__
 
 
     def __delitem__(self, name):
@@ -365,19 +366,19 @@ class stdApp(baseApp):
         super().__init__(Tk(), name, width=width)
 
         if type(config) == str:
-            self.config = {}
+            self.__config__ = {}
             def scanCfg(app: stdApp):
                 for k, v in readJson(config).items():
                     self[k] = v
 
             def onClose0(app: stdApp):
                 with open(config, "w+") as file: 
-                    json.dump(self.config, file, indent=1)
+                    json.dump(self.__config__, file, indent=1)
 
             self.onStart(scanCfg)
             self.onClose(onClose0)
         else:
-            self.config = config
+            self.__config__ = config
 
 
     def ico(self, path="icon.png") -> Self:
@@ -401,13 +402,13 @@ class subWindow(baseApp):
     """
     def __init__(self, parent: stdApp, name="Window", size=None):
         super().__init__(Toplevel(), name, size)
-        self.config = parent.config
+        self.__config__ = parent.__config__
 
         # Клонирование доступов к переменным из родительского окна
         def copyVars(app):
             for name in self.config:
                 if name in self.__components__:
-                    self.__components__[name][1](self.config[name])
+                    self.__components__[name][1](self.__config__[name])
 
         self.onStart(copyVars)
 

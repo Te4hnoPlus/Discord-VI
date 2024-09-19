@@ -3,57 +3,57 @@ from te4lib import errMsg
 import json
 
 
+__tracker__: DiscordTracker = None
+__prevId__: str = None
 def main():
     """
     Приложение для установки произвольного игрового статуса в Discord
     Для использование укажите ID приложения и свои данные, если необходимо
     """
-    tracker: DiscordTracker = None
-    prevId: str = None
-
-    # Сброс состояния кнопки на значение по умолчанию
+    # Сброс состояния на значение по умолчанию
     def onStart(app: stdApp):
         app["btn1"] = "Start"
+        if(app["enable-defaults"] == True):
+            enableTracker(app)
 
 
     # Обработка нажатия кнопки
     def enableTracker(app: stdApp):
+        global __tracker__, __prevId__
+        needStart = False
         try:
-            global tracker, prevId
-            needStart = False
-
-            if(tracker == None):
+            if(__tracker__ == None):
                 # Запуск трекера, где ID = ID приложения
-                prevId = id = app["id"]
+                __prevId__ = id = app["id"]
                 if (id == ""):
                     app.visualError("Укажите id")
                     return
                 
                 app["btn1"] = "Update"
-                tracker = DiscordTracker(id)
+                __tracker__ = DiscordTracker(id)
                 needStart = True
             else:
                 # Перезапуск трекера при изменении id
                 id = app["id"]
-                if(id != prevId):
-                    prevId = id
-                    tracker.destroy()
-                    tracker = DiscordTracker(id)
+                if(id != __prevId__):
+                    __prevId__ = id
+                    __tracker__.destroy()
+                    __tracker__ = DiscordTracker(id)
                     needStart = True
 
             # Обновление информации в трекере
-            tracker["logo_url"]  = app["logo_url"]
-            tracker["logo_name"] = app["logo_name"]
-            tracker["detals"]    = app["detals"]
-            tracker["state"]     = app["state"]
+            __tracker__["logo_url"]  = app["logo_url"]
+            __tracker__["logo_name"] = app["logo_name"]
+            __tracker__["detals"]    = app["detals"]
+            __tracker__["state"]     = app["state"]
 
             # Разбор кода кнопок
             buttons = app["buttons"]
             if(buttons != None and buttons != ""):
-                tracker["buttons"] = json.loads(buttons)
+                __tracker__["buttons"] = json.loads(buttons)
 
             if(needStart):
-                tracker.startTrack()
+                __tracker__.startTrack()
                 app.visualInfo("Отображение активировано")
             else:
                 app.visualInfo("Информация обновлена")
