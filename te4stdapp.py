@@ -210,7 +210,7 @@ class baseApp:
             funcSet(default)
 
         def unfocus(event):
-            self.config[var] = funcGet()
+            self.__config__[var] = funcGet()
             unfocusTask(self)
 
         def focus(event):
@@ -430,9 +430,9 @@ class DiscordTracker:
     и без лишних запросов к Discord
     ID приложения должен быть указан в конструкторе
     """
-    def __init__(self, client_id):
+    def __init__(self, client_id, start=0):
         self.proc =  None
-        self.start = int(time.time())
+        self.start = int(time.time())+start
         self.RPC = Presence(client_id)
         self.RPC.connect()
         self.active = False

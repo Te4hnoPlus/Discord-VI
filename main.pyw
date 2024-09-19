@@ -29,8 +29,12 @@ def main():
                     app.visualError("Укажите id")
                     return
                 
+                timeShift = app["time-shift"]
+                if(timeShift != None):
+                    timeShift = int(timeShift)
+                
                 app["btn1"] = "Update"
-                __tracker__ = DiscordTracker(id)
+                __tracker__ = DiscordTracker(id, start=timeShift)
                 needStart = True
             else:
                 # Перезапуск трекера при изменении id
@@ -38,7 +42,10 @@ def main():
                 if(id != __prevId__):
                     __prevId__ = id
                     __tracker__.destroy()
-                    __tracker__ = DiscordTracker(id)
+                    timeShift = app["time-shift"]
+                    if(timeShift != None):
+                        timeShift = int(timeShift)
+                    __tracker__ = DiscordTracker(id, timeShift)
                     needStart = True
 
             # Обновление информации в трекере
@@ -75,6 +82,7 @@ def main():
         ).input("detals", "Waiting ...",
         ).text("Код кнопок"
         ).input("buttons", height=6
+        ).text("Сдвиг").input(var="time-shift").nw(
         ).buttom(enableTracker, "Start", var="btn1"
         ).onStart(onStart
         ).ico().start()
