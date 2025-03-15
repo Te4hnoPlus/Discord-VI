@@ -43,7 +43,7 @@ def main():
                     __prevId__ = id
                     __tracker__.destroy()
                     timeShift = app["time-shift"]
-                    if(timeShift != None):
+                    if timeShift != None and len(timeShift) > 0:
                         timeShift = int(timeShift)
                     __tracker__ = DiscordTracker(id, timeShift)
                     needStart = True
